@@ -1,20 +1,41 @@
 
-// Crie uma variável canvas
+var canvas = new fabric.Canvas("myCanvas");
 
-//Defina as posições iniciais da bola e do buraco.
+ballX = 0;
+ballY = 0;
+holeY = 400;
+holeX = 800;
 
 
 blockImageWidth = 5;
 blockImageHeight = 5;
 
 function loadImg(){
-	// Escreva o código para enviar a imagem da bola de golfe ao canvas
+	fabric.Image.fromURL("golf-h.png", function(Img){
+		holeObject = Img;
+		holeObject.scaleToWidth(50);
+		holeObject.scaleToHeight(50);
+		holeObject.set({
+			top:holeY,
+			left:holeX
+		})
+		canvas.add(holeObject);
+	})
 	newImage();
 }
 
 function newImage()
 {
-	// Escreva o código para enviar a imagem da bola ao canvas
+	fabric.Image.fromURL("ball.png", function(Img){
+		ballObject = Img;
+		ballObject.scaleToWidth(50);
+		ballObject.scaleToHeight(50);
+		ballObject.set({
+			top:ballY,
+			left:ballX
+		})
+		canvas.add(ballObject);
+	})
 }
 
 window.addEventListener("keydown", myKeyDown);
@@ -23,10 +44,11 @@ function myKeyDown(e)
 {
 	keyPressed = e.keyCode;
 	console.log(keyPressed);
-	/* Verifique a condição das imagens da bola e do buraco para finalizar o jogo. 
-	E se a id coordenadas coincidem, para remover a imagem da bola
-	e exibir "Você atingiu o objetivo!!!" 
-	além de tornar a borda do canvas vermelha 'red'. */
+	if(ballX==holeX&&ballY==holeY){
+		canvas.remove(ballObject);
+		document.getElementById("hd3").innerHTML="você atingiu o objetivo!!!";
+		document.getElementById("myCanvas").style.borderColor = "red";
+	}
 	
 	else{
 		if(keyPressed == '38')
@@ -53,19 +75,29 @@ function myKeyDown(e)
 	
 	function up()
 	{
-		// Escreva o código para mover a bola para cima.
+		if(ballY>=0){
+			ballY = ballY - blockImageHeight;
+			canvas.remove(ballObject);
+			newImage();
+		}
 	}
 
 	function down()
 	{
-		 // Escreva o código para mover a bola para baixo.
+		if(ballY<=450){
+			ballY = ballY + blockImageHeight;
+			canvas.remove(ballObject);
+			newImage();
+		}
 	}
 
 	function left()
 	{
 		if(ballX >5)
 		{
-			// Escreva o código para mover a bola para a esquerda.
+			ballX = ballX - blockImageWidth;
+			canvas.remove(ballObject);
+			newImage();
 		}
 	}
 
@@ -73,7 +105,9 @@ function myKeyDown(e)
 	{
 		if(ballX <=1050)
 		{
-			// Escreva o código para mover a bola para a direita.
+			ballX = ballX + blockImageWidth;
+			canvas.remove(ballObject);
+			newImage();
 		}
 	}
 	
